@@ -30,21 +30,22 @@ jenkins:
               retentionTimeout: 10
               jenkinsUrl: "http://${jenkins_cloud_map_name}:${jenkins_controller_port}"
               templates:
-                  - cpu: "512"
+                  - cpu: "2048"
                     image: "jenkins/inbound-agent"
-                    label: "build-example-spot"
+                    label: "spot-node"
                     executionRole: ${execution_role_arn}
                     launchType: "FARGATE"
                     memory: 0
-                    memoryReservation: 1024
+                    memoryReservation: 8192
                     networkMode: "awsvpc"
                     privileged: false
                     remoteFSRoot: "/home/jenkins"
                     securityGroups: ${agent_security_groups}
                     sharedMemorySize: 0
                     subnets: ${subnets}
-                    templateName: "build-example"
+                    templateName: "normal-node"
                     uniqueRemoteFSRoot: false
+                    assignPublicIp : true
         - ecs:
               allowedOverrides: "inheritFrom,label,memory,cpu,image"
               credentialsId: ""
@@ -54,21 +55,22 @@ jenkins:
               retentionTimeout: 10
               jenkinsUrl: "http://${jenkins_cloud_map_name}:${jenkins_controller_port}"
               templates:
-                  - cpu: "512"
+                  - cpu: "2048"
                     image: "jenkins/inbound-agent"
-                    label: "build-example"
+                    label: "normal-node"
                     executionRole: ${execution_role_arn}
                     launchType: "FARGATE"
                     memory: 0
-                    memoryReservation: 1024
+                    memoryReservation: 8192
                     networkMode: "awsvpc"
                     privileged: false
                     remoteFSRoot: "/home/jenkins"
                     securityGroups: ${agent_security_groups}
                     sharedMemorySize: 0
                     subnets: ${subnets}
-                    templateName: "build-example"
+                    templateName: "normal-node"
                     uniqueRemoteFSRoot: false
+                    assignPublicIp : true
 security:
   sSHD:
     port: -1
@@ -81,7 +83,7 @@ jobs:
               pipeline {
                   agent {
                       ecs {
-                          inheritFrom 'build-example'
+                          inheritFrom 'normal-node'
                       }
                   }
                   stages {
@@ -108,7 +110,7 @@ jobs:
               pipeline {
                   agent {
                       ecs {
-                          inheritFrom 'build-example-spot'
+                          inheritFrom 'spot-node'
                       }
                   }
                   stages {

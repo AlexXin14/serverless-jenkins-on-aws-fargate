@@ -6,10 +6,13 @@ deploy_example.sh script and therefore do not need to be updated.
 terraform {
   required_version = ">= 0.13"
   backend "s3" {
-    bucket = "willbeoverwritten"
-    key    = "willbeoverwritten"
+    bucket = "serverless-terraform-state-file-s3-6-18"
+    key    = "./terraform.tfstate"
     encrypt = true
+    dynamodb_table = "serverless-jenkins-terraform-lock"
   }
 }
 
-provider "aws" {}
+provider "aws" {
+  region = "ap-southeast-2"
+}

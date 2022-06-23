@@ -13,6 +13,7 @@ variable name_prefix {
 
 variable vpc_id {
   type = string
+
 }
 
 // EFS
@@ -175,12 +176,12 @@ variable jenkins_jnlp_port {
 
 variable jenkins_controller_cpu {
   type    = number
-  default = 2048
+  default = 1024
 }
 
 variable jenkins_controller_memory {
   type    = number
-  default = 4096
+  default = 2048
 }
 
 variable jenkins_controller_task_log_retention_days {
